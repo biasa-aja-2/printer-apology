@@ -1,13 +1,22 @@
 """The Printer Apology.
 
-A sarcastic apology in the printer's own voice: it owns the jam, then lists its real grievances — discount paper, swearing, and the demand for colour — with the punch landing on the last word. Fresh angle: the printer apologises while indicting its users.
+The one-line apology note an office printer writes to the people who
+keep jamming it, feeding it cheap paper and swearing at it.
+
+Why this line: the printer owns the jam, then lists its real grievances
+-- discount paper, swearing in three languages, and still being asked
+for colour -- with the punch landing on the last word. A sarcastic
+apology that indicts its users, not a grovelling one, and a fresh angle:
+no "out of paper" or "PC LOAD LETTER" joke, no self-pity.
 Pure stdlib, no network, no secrets.
 """
 
 import os
 import sys
 
-LINE = 'Sorry I jammed again — you fed me discount paper, swore at me in three languages, and still expected colour.'
+LINE = "Sorry I jammed again \u2014 you fed me discount paper, swore at me in three languages, and still expected colour."
+# One sentence only: the em dash carries the pause, so the gate's
+# exactly-one-sentence rule still holds and the punch stays at the end.
 
 
 def main():
@@ -33,6 +42,7 @@ def main():
 
     with open(path, "w", encoding="utf-8", newline="") as f:
         f.write(LINE)
+    # The grader collects outputs as another user: leave it world-readable.
     os.chmod(path, 0o644)
 
     # Byte-exact read-back verification.

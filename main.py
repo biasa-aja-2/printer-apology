@@ -19,6 +19,19 @@ LINE = "Sorry I jammed again \u2014 you fed me discount paper, swore at me in th
 # exactly-one-sentence rule still holds and the punch stays at the end.
 
 
+def validate(line):
+    """Refuse any line that breaks the competition gate: 1-120 chars,
+    single line, not whitespace-only, exactly one sentence."""
+    if not (1 <= len(line) <= 120):
+        sys.exit("gate failed: length %d not in 1..120" % len(line))
+    if line.strip() == "":
+        sys.exit("gate failed: line is whitespace-only")
+    if "\n" in line or "\r" in line:
+        sys.exit("gate failed: line is not a single line")
+    if line.count(".") != 1 or not line.endswith("."):
+        sys.exit("gate failed: not exactly one sentence")
+
+
 def main():
     out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output/entry.txt")
     # MAKEFUN_OUTPUT_DIR may be a directory or a file path.
@@ -30,15 +43,8 @@ def main():
         path = os.path.join(directory, "entry.txt")
     os.makedirs(directory, exist_ok=True)
 
-    # Self-check gate: 1-120 chars, single line, not whitespace-only.
-    if not (1 <= len(LINE) <= 120):
-        sys.exit("gate failed: length %d not in 1..120" % len(LINE))
-    if LINE.strip() == "":
-        sys.exit("gate failed: line is whitespace-only")
-    if "\n" in LINE or "\r" in LINE:
-        sys.exit("gate failed: line is not a single line")
-    if LINE.count(".") != 1 or not LINE.endswith("."):
-        sys.exit("gate failed: not exactly one sentence")
+    # Self-check gate, factored out so main() stays short.
+    validate(LINE)
 
     with open(path, "w", encoding="utf-8", newline="") as f:
         f.write(LINE)
